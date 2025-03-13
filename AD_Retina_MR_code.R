@@ -1,6 +1,7 @@
-#Script for analysing the causal risk factors of Alzheimer's disease identified from fundal imaging of the eye using bidirectional Mendelian Randomization (MR)
-#For more information on commands/additional options see: https://mrcieu.github.io/TwoSampleMR/
-
+### Script for analysing the causal risk factors of Alzheimer's disease identified from fundal imaging of the eye using bidirectional Mendelian Randomization (MR)
+### TwoSampleMR package was applied for the estiamting the bidirectional effect between Alzheimer's disease and ocular features,
+### For more information on commands/additional options see: https://mrcieu.github.io/TwoSampleMR/
+## For simplicity, the code of bidirectional MR analysis between Alzheimer's disease and RNFL are provided here
 ######################################################################################################################################
 # Load packages
 ######################################################################################################################################
@@ -20,7 +21,7 @@ library(ggplot2)
 setwd("PATH_TO_FILE")
 
 ########################################################################################
-########### Estiamtes of the causal effect of AD on ocular features ####################
+########### Estiamtation of the causal effect of AD on ocular features ####################
 ################## AD on RNFL thickness ################################################
 
 #### For the direction of MR casual effect AD to Ocular features, we extracted GWAS summary data of Alzheimer's disease (Kunkle et al, Nature Genetics, 2019) 
@@ -152,7 +153,7 @@ ggsave(p4[[1]], file="AD_RNFL_main_leaveoneout_plot.pdf", width=7, height=7)
 
 
 ########################################################################################
-########### Estiamtes of the causal effect of ocular features on AD ####################
+########### Estiamtation of the causal effect of ocular features on AD ####################
 ################## RNFL thickness on AD ################################################
 
 
