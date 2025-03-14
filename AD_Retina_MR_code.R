@@ -21,7 +21,7 @@ library(ggplot2)
 setwd("PATH_TO_FILE")
 
 ########################################################################################
-########### Estiamtation of the causal effect of AD on ocular features ####################
+########### Estimtation of the causal effect of AD on ocular features ####################
 ################## AD on RNFL thickness ################################################
 
 #### For the direction of MR casual effect AD to Ocular features, we extracted GWAS summary data of Alzheimer's disease (Kunkle et al, Nature Genetics, 2019) 
@@ -153,7 +153,7 @@ ggsave(p4[[1]], file="AD_RNFL_main_leaveoneout_plot.pdf", width=7, height=7)
 
 
 ########################################################################################
-########### Estiamtation of the causal effect of ocular features on AD ####################
+########### Estimtation of the causal effect of ocular features on AD ####################
 ################## RNFL thickness on AD ################################################
 
 
