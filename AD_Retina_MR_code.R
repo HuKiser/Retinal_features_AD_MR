@@ -196,50 +196,37 @@ AD1$ncontrol.outcome<-41944
 AD1$units.outcome<-"log odds"
 
 ##################### extracting the EAF column from the european reference pannel (1000Genome project) as this column is missing in IEU OpendGWAS dataset
-######## this step is only required if existing summary data has missing effect allele (EAF) column 
-### install biomaRt package for extracting missing column from 1000Genome project
-BiocManager::install("biomaRt")
-library(biomaRt)
+###### eaf column is missing, so need to extract from the 1000 genome project for the European population
 
-#### Connect to Ensembl database using biomaRt
-ensembl <- useMart("ENSEMBL_MART_SNP", dataset = "hsapiens_snp", host = "grch37.ensembl.org")  # Using GRCh37 version
+data1<-AD1[, c("SNP","chr.outcome", "pos.outcome", "effect_allele.outcome", "other_allele.outcome", "beta.outcome")]
 
-AD1<-AD1[, -which(names(AD1)== "eaf.outcome")]
+data1$ID<-paste(data1$chr.outcome, data1$pos.outcome, sep = ":")
+head(data1)
 
-### List of SNPs of AD 
-snp_list <- AD1$SNP
+### read the 1000Genome file for European ancestry
+#library("data.table")
+Euro_Genome<-fread("1000Genome_European_referece_snps_maf.txt", sep = "\t")
+head(Euro_Genome)
+dim(Euro_Genome)
 
-### Fetch SNP information including effect allele frequency (EUR population)
-snp_data <- getBM(
-  attributes = c("refsnp_id", "allele", "minor_allele", "minor_allele_freq"),
-  filters = "snp_filter",
-  values = snp_list,
-  mart = ensembl
-)
+data12<-merge(data1, Euro_Genome, by = "ID")
+dim(data12)
+head(data12)
 
-snp_data
-
-##### merging a subset of outcome data and reference data
-data1<-AD1[, c("SNP","effect_allele.outcome", "other_allele.outcome", "beta.outcome")]
-data2<-snp_data[, c("refsnp_id", "minor_allele", "minor_allele_freq")]
-data12<-merge(data1, data2, by.x = "SNP", by.y = "refsnp_id")
+### checking the allele and converting maf accordingly
 data12$eaf.outcome<-"NA"
-
-#### converting minor allele frequency (MAF) to effect allele frequnency (EAF) for the subset of outcome data
 data123 <- within(data12, {
   # Check if Effect_Allele matches Minor_Allele
-  match_effect_minor <- effect_allele.outcome == minor_allele
-  
-  # If they do not match, switch the  minor allele to effect allele
-  minor_allele <- ifelse(match_effect_minor, minor_allele, effect_allele.outcome)
-  
-  # Update Effect_Allele_Frequency from 1-Minor_Allele_Frequency if they didn't match
-  eaf.outcome <- ifelse(match_effect_minor, eaf.outcome, 1-minor_allele_freq)
+  match_effect_minor <- effect_allele.outcome == ALT & other_allele.outcome == REF
+  # If they do not match, switch the  minor allele (ALT is the minor allele and ALTfreq is provided) to effect allele
+  minor_allele <- ifelse(match_effect_minor, ALT, effect_allele.outcome)
+  major_allele <- ifelse(match_effect_minor, REF, other_allele.outcome)
+  # Update Effect_Allele_Frequency from 1-MAF (which is basically ALTfreq) if they didn't match
+  eaf.outcome <- ifelse(match_effect_minor, eaf.outcome, 1-MAF)
   # Update Effect_Allele_Frequency from Minor_Allele_Frequency if they match
-  eaf.outcome <- ifelse(!match_effect_minor, eaf.outcome, minor_allele_freq)
+  eaf.outcome <- ifelse(!match_effect_minor, eaf.outcome, MAF)
 })
-
-### extracting the SNPs and EAF from the converted dataset and merging the eaf column with main outcome data
+head(data123)
 eafdata<-data123[, c("SNP", "eaf.outcome")]
 AD2<-merge(AD1, eafdata, by = "SNP")
 
