@@ -1,5 +1,5 @@
 ### Script for analysing the causal risk factors of Alzheimer's disease identified from fundal imaging of the eye using bidirectional Mendelian Randomization (MR)
-### TwoSampleMR package was applied for the estiamting the bidirectional effect between Alzheimer's disease and ocular features,
+### TwoSampleMR package was applied for estimating the bidirectional effect between Alzheimer's disease and ocular features,
 ### For more information on commands/additional options see: https://mrcieu.github.io/TwoSampleMR/
 ## For simplicity, the code of bidirectional MR analysis between Alzheimer's disease and RNFL are provided here
 ######################################################################################################################################
@@ -21,12 +21,12 @@ library(ggplot2)
 setwd("PATH_TO_FILE")
 
 ########################################################################################
-########### Estimtation of the causal effect of AD on ocular features ####################
+########### Estimation of the causal effect of AD on ocular features ####################
 ################## AD on RNFL thickness ################################################
 
 #### For the direction of MR casual effect AD to Ocular features, we extracted GWAS summary data of Alzheimer's disease (Kunkle et al, Nature Genetics, 2019) 
 ## from IEU OpenGWAS project (ID: "ieu-b-2") for the list of variants that showed best level of association after meta analysis of Stage 1 and Stage 2 
-## (from the published table 1: https://www.nature.com/articles/s41588-019-0358-2/tables/1). I also copied the column of effect allele from that published table 
+## (from the published table 1: https://www.nature.com/articles/s41588-019-0358-2/tables/1). We also copied the column of effect allele from that published table 
 ## as this column was missing in the summary data of AD in IEU OpenGWAS project.
 
 ############# Read exposure data (AD)
